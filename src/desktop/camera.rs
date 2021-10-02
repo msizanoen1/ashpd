@@ -177,7 +177,7 @@ fn pipewire_node_id_inner<F: FnOnce(u32) + Clone + 'static>(callback: F) -> Resu
 /// *Note* The socket referenced by `fd` must not be used while this function is running.
 #[cfg(feature = "feature_pipewire")]
 pub async fn pipewire_node_id_fd(fd: RawFd) -> Result<u32, pw::Error> {
-    let fd = libc::fcntl(fd, libc::F_DUPFD_CLOEXEC, 3);
+    let fd = unsafe { libc::fcntl(fd, libc::F_DUPFD_CLOEXEC, 3) };
 
     if fd == -1 {
         return Err(pw::Error::CreationFailed);
